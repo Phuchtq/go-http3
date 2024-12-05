@@ -116,8 +116,8 @@ func generateCertificate() {
 	}
 
 	// Encode key and write to file
-	if err := pem.Encode(certFile, &pem.Block{
-		Type:  certType,
+	if err := pem.Encode(keyFile, &pem.Block{
+		Type:  privateKeyType,
 		Bytes: privateBytes,
 	}); err != nil {
 		logger.Fatal()

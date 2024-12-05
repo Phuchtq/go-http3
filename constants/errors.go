@@ -20,4 +20,6 @@ const (
 	ConvertKeyErrMsg string = "Error while converting private key - "
 
 	ReadFileErrMsg string = "Error while reading file %s - "
+
+	EnvSetErrMsg string = "Error while setting env variable %s with value %s - "
 )

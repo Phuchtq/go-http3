@@ -18,14 +18,16 @@ const (
 func setUp() {
 	var port string = os.Getenv(constants.PetApiPort)
 	var service string = "Pet"
+	var logger = &log.Logger{}
 
 	if port == "" {
 		// Log message to inform that env variable has not been set
-		log.Println(fmt.Sprintf(constants.EnvApiPortNotSetMsg, service))
+		logger.Println(fmt.Sprintf(constants.EnvApiPortNotSetMsg, service))
 
 		// Set env variable
-		os.Setenv(constants.PetApiPort, backUpPetApiPort)
-		log.Println(fmt.Sprintf(constants.EnvApiPortSetMsg, service) + backUpPetApiPort)
+		if err := os.Setenv(constants.PetApiPort, backUpPetApiPort); err != nil {
+			logger.Println(fmt.Sprintf(constants.EnvSetErrMsg, constants.PetApiPort, backUpPetApiPort) + err.Error())
+		}
 
 		port = backUpPetApiPort
 	}
@@ -37,15 +39,15 @@ func setUp() {
 	}
 
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatal(fmt.Sprintf(constants.ApiInitErrMsg, service, port) + err.Error())
+		logger.Fatal(fmt.Sprintf(constants.ApiInitErrMsg, service, port) + err.Error())
 	}
 
-	log.Println("Pet service starts on port: ", port)
+	logger.Println("Pet service starts on port: ", port)
 }
 
 var rootCmd = &cobra.Command{
 	Use:     "your-service",
-	Short:   "your brief description of this service.",
+	Short:   "Your brief description of this service.",
 	Aliases: []string{"command 1", "command 2", "command 3"}, // alternative commands
 	Run: func(cmd *cobra.Command, args []string) { // Start command
 		log.Println("Run service")

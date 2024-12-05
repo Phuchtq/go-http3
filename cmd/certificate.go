@@ -4,7 +4,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
@@ -32,33 +31,6 @@ const (
 const (
 	expiration time.Duration = time.Hour * 24 * 365 // 1 year
 )
-
-func generateTLSCert() tls.Certificate {
-	cert, err := tls.LoadX509KeyPair(certPath, keyPath)
-	if err != nil {
-		panic("")
-	}
-
-	// Parse the certificate
-	certData, err := x509.ParseCertificate(cert.Certificate[0])
-	if err != nil {
-		panic("Error while parsing TLS certificate: " + err.Error())
-	}
-
-	// Certificate expired
-	if isCertificateExpired(certData) {
-		generateCertificate() // Regenerate
-
-		res, err := tls.LoadX509KeyPair(certPath, keyPath) // Reload
-		if err != nil {
-			panic("")
-		}
-
-		return res
-	}
-
-	return cert
-}
 
 // func getCertificate() *x509.Certificate {
 // 	var logger = &log.Logger{}

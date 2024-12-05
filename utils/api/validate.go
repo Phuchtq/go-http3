@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func IsRequestValid(req *http.Request, data interface{}) bool {
+func IsRequestValid(req *http.Request, data any) bool {
 	body, err := io.ReadAll(req.Body)
 
 	if err != nil {
